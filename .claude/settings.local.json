@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(npm install)",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:dataengongcp.uc.r.appspot.com)",
+      "Skill(frontend-design:frontend-design)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nRedesign website with modern healthcare aesthetic\n\n- Fix corrupted JSX syntax in main.jsx, App.jsx, and index.html\n- Create all component files \\(Navbar, Hero, Mission, About, Services, Contact, Footer\\)\n- Implement \"Warm Haven\" design system with teal/terracotta color palette\n- Add responsive CSS with animations and hover effects\n- Add Privacy Policy page with CCPA compliance\n- Integrate real content from reference site \\(mission, services, contact info\\)\n- Add CLAUDE.md for development guidance\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}

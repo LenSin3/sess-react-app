@@ -9,6 +9,8 @@ function Contact() {
         message: ''
     })
     const [submitted, setSubmitted] = useState(false)
+    const [submitting, setSubmitting] = useState(false)
+    const [error, setError] = useState(false)
 
     const handleChange = (e) => {
         setFormData({
@@ -17,12 +19,35 @@ function Contact() {
         })
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // Handle form submission
-        console.log('Form submitted:', formData)
-        setSubmitted(true)
-        setTimeout(() => setSubmitted(false), 3000)
+        setSubmitting(true)
+        setError(false)
+
+        try {
+            const response = await fetch('https://formspree.io/f/mvzgjedj', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    message: formData.message
+                })
+            })
+
+            if (response.ok) {
+                setSubmitted(true)
+                setFormData({ firstName: '', lastName: '', email: '', message: '' })
+            } else {
+                setError(true)
+            }
+        } catch (err) {
+            setError(true)
+        } finally {
+            setSubmitting(false)
+        }
     }
 
     return (
@@ -100,6 +125,32 @@ function Contact() {
                             <h3 style={{ marginBottom: '0.5rem' }}>Thank You!</h3>
                             <p>We'll get back to you shortly.</p>
                         </div>
+                    ) : error ? (
+                        <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+                            <div style={{
+                                width: '64px',
+                                height: '64px',
+                                background: 'var(--terracotta-light)',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                margin: '0 auto 1.5rem',
+                                color: 'var(--terracotta)',
+                                fontSize: '1.5rem'
+                            }}>
+                                !
+                            </div>
+                            <h3 style={{ marginBottom: '0.5rem' }}>Something went wrong</h3>
+                            <p>Please try again or call us directly.</p>
+                            <button
+                                onClick={() => setError(false)}
+                                className="btn btn-secondary"
+                                style={{ marginTop: '1rem' }}
+                            >
+                                Try Again
+                            </button>
+                        </div>
                     ) : (
                         <form className="contact-form" onSubmit={handleSubmit}>
                             <div className="form-row">
@@ -158,9 +209,9 @@ function Contact() {
                                 ></textarea>
                             </div>
 
-                            <button type="submit" className="btn btn-primary form-submit">
-                                Send Message
-                                <FiSend />
+                            <button type="submit" className="btn btn-primary form-submit" disabled={submitting}>
+                                {submitting ? 'Sending...' : 'Send Message'}
+                                {!submitting && <FiSend />}
                             </button>
                         </form>
                     )}
